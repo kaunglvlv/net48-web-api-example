@@ -10,7 +10,8 @@ namespace WebApiExample.DataStore
 {
     public class UserContext : DbContext, IUnitOfWork
     {
-        public UserContext()
+        public UserContext(string connectionString)
+            : base(connectionString)
         {
             Database.SetInitializer(
                 new CreateDatabaseIfNotExists<UserContext>());

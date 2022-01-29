@@ -2,7 +2,6 @@ using System.Web.Http;
 using Unity;
 using Unity.WebApi;
 using WebApiExample.Common.DataAccess;
-using WebApiExample.DataStore;
 using WebApiExample.WebApp.Services;
 
 namespace WebApiExample.WebApp
@@ -14,8 +13,11 @@ namespace WebApiExample.WebApp
 			var container = new UnityContainer();
 
             container
+                .RegisterType<IUnitOfWorkFactory, ClaimsUnitOfWorkFactory>()
                 .RegisterType<IUserService, UserService>()
-                .RegisterType<IUnitOfWork, UserContext>()
+                .RegisterFactory<IUnitOfWork>(c => c
+                    .Resolve<IUnitOfWorkFactory>()
+                    .Create())
                 ;
             
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
